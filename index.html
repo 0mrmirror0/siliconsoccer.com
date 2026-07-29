@@ -325,7 +325,7 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
   <button class="big ghost" id="mHow">HOW TO PLAY</button>
   <button class="big ghost" id="mSet">SETTINGS</button>
   <p id="mErr"></p>
-  <div class="ver">SILICON SOCCER — AIGEN-C · build v59 · 2026-07-30</div>
+  <div class="ver">SILICON SOCCER — AIGEN-C · build v60 · 2026-07-30</div>
 </div>
 
 <div id="help">
@@ -1495,9 +1495,9 @@ const PEND={png:null, gif:null};
 function showEndCard(){ drawEndCard(); if(endwrap) endwrap.classList.add('on');
   PEND.png=null;
   if(endcv && endcv.toBlob) endcv.toBlob(b=>{ if(b) PEND.png=new File([b],'silicon-soccer.png',{type:'image/png'}); },'image/png');
-  if(shImg) shImg.textContent=CAN_SHARE?'SHARE IMAGE':'SAVE IMAGE';
+  if(shImg) shImg.textContent='SHARE IMAGE';
   if(shVid && !CLIP.busy){ shVid.disabled=false;
-    shVid.textContent=PEND.gif?(CAN_SHARE?'SHARE VIDEO':'SAVE VIDEO'):'MAKE VIDEO';
+    shVid.textContent=PEND.gif?'SHARE VIDEO':'MAKE VIDEO';
     shVid.classList.toggle('ready', !!PEND.gif); }
 }
 /* ---------- encoder GIF89a interno (niente dipendenze, monofile) ---------- */
@@ -1618,33 +1618,42 @@ function clipFinish(){
     blob=>{ CLIP.busy=false; CLIP.frames=[]; CLIP.prev=null;
       PEND.gif=new File([blob],'silicon-soccer-goal.gif',{type:'image/gif'});
       if(shVid){ shVid.disabled=false;
-        shVid.textContent=CAN_SHARE?'SHARE VIDEO':'SAVE VIDEO';
+        shVid.textContent='SHARE VIDEO';
         shVid.classList.add('ready'); } });
 }
 /* ---------- share ---------- */
 const SHARE_TXT='Silicon Soccer — liquid football on a microchip. Play free: https://siliconsoccer.com';
-const CAN_SHARE=(()=>{ try{ return !!(navigator.canShare && navigator.share &&
-  navigator.canShare({files:[new File([new Blob(['x'])],'t.png',{type:'image/png'})]})); }catch(_){ return false; } })();
 function saveFile(file){                        // ripiego: download diretto
   try{ const u=URL.createObjectURL(file), a=document.createElement('a');
     a.href=u; a.download=file.name; a.rel='noopener'; document.body.appendChild(a); a.click();
     setTimeout(()=>{ URL.revokeObjectURL(u); a.remove(); },4000); return true; }catch(_){ return false; }
 }
-function shareFile(file){                       // chiamata DENTRO il gesto, senza await davanti
-  if(CAN_SHARE){ navigator.share({files:[file], text:SHARE_TXT}).catch(err=>{
-      if(err && err.name==='AbortError') return;  // l'utente ha annullato
-      saveFile(file); });
-    return true; }
-  return saveFile(file);
+function saved(btn){                            // solo dopo un download vero, mai come promessa
+  if(!btn) return; const t=btn.textContent;
+  btn.textContent='SAVED \u2713';
+  setTimeout(()=>{ if(btn.textContent==='SAVED \u2713') btn.textContent=t; },1800);
+}
+function shareFile(file,btn){                   // chiamata DENTRO il gesto, senza await davanti
+  try{
+    // se canShare manca provo comunque: assenza del metodo non vuol dire assenza di share
+    if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+      navigator.share({files:[file], text:SHARE_TXT}).catch(err=>{
+        if(err && err.name==='AbortError') return;   // annullato dall'utente, non ripiego
+        if(saveFile(file)) saved(btn); });
+      return true;
+    }
+  }catch(_){}
+  if(saveFile(file)) saved(btn);
+  return true;
 }
 if(shImg) shImg.onclick=e=>{ e.stopPropagation();
-  if(PEND.png){ shareFile(PEND.png); return; }
+  if(PEND.png){ shareFile(PEND.png, shImg); return; }
   endcv.toBlob(b=>{ if(!b) return; PEND.png=new File([b],'silicon-soccer.png',{type:'image/png'});
-    shImg.textContent=CAN_SHARE?'SHARE IMAGE':'SAVE IMAGE'; },'image/png');
+    shImg.textContent='SHARE IMAGE'; },'image/png');
 };
 if(shVid) shVid.onclick=e=>{ e.stopPropagation();
   if(CLIP.busy||CLIP.on) return;
-  if(PEND.gif){ shareFile(PEND.gif); return; }     // gia' pronta: parte il foglio di condivisione
+  if(PEND.gif){ shareFile(PEND.gif, shVid); return; }   // gia' pronta: parte il foglio di condivisione
   shVid.disabled=true; shVid.textContent='CAPTURING…';
   if(!clipStart()){ shVid.disabled=false; shVid.textContent='MAKE VIDEO'; } };
 /* i bottoni al centro del campo in lobby/over, nel footer durante il gioco */
