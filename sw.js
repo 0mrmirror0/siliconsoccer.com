@@ -1,6 +1,6 @@
 // Silicon Soccer — service worker: gioco offline (cache-first)
-const CACHE = 'silicon-soccer-v50-20260729-v54';
-const ASSETS = ['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./privacy.html'];
+const CACHE = 'silicon-soccer-v62-20260730';
+const ASSETS = ['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png','./og.png','./privacy.html'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

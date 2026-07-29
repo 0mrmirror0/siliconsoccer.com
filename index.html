@@ -44,27 +44,33 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="author" content="AIGEN-C">
 <meta name="application-name" content="Silicon Soccer">
-<meta name="apple-mobile-web-app-title" content="Silicon Soccer">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="canonical" href="https://siliconsoccer.com/">
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="icon" href="./icon-192.png">
-<link rel="apple-touch-icon" href="./icon-192.png">
+<!-- Open Graph: gli scraper non eseguono JS e vogliono URL assoluti -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Silicon Soccer">
 <meta property="og:title" content="Silicon Soccer - Liquid football on a microchip">
 <meta property="og:description" content="A fast turn-based physics football game: aim three liquid blobs, launch everything at once, and outsmart the AI.">
 <meta property="og:url" content="https://siliconsoccer.com/">
-<meta property="og:image" content="https://siliconsoccer.com/icon-512.png">
-<meta property="og:image:width" content="512">
-<meta property="og:image:height" content="512">
+<meta property="og:image" content="https://siliconsoccer.com/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Silicon Soccer: campo grafite con blob rossi e blu su un microchip">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Silicon Soccer - Liquid football on a microchip">
 <meta name="twitter:description" content="Aim three liquid blobs, launch everything at once, and outsmart the AI in a neon physics football game.">
-<meta name="twitter:image" content="https://siliconsoccer.com/icon-512.png">
+<meta name="twitter:image" content="https://siliconsoccer.com/og.png">
+<!-- installazione a schermo intero su iOS: senza questi resta una scheda di Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Silicon Soccer">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png" sizes="192x192">
+<link rel="icon" href="./icon-512.png" sizes="512x512">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"VideoGame","name":"Silicon Soccer","url":"https://siliconsoccer.com/","description":"A fast turn-based physics football game where liquid blobs battle an AI on a neon microchip pitch.","image":"https://siliconsoccer.com/icon-512.png","genre":["Sports","Strategy","Physics game"],"playMode":"SinglePlayer","applicationCategory":"GameApplication","operatingSystem":"Web browser","publisher":{"@type":"Organization","name":"AIGEN-C","url":"https://aigen-c.com/"}}
+{"@context":"https://schema.org","@type":"VideoGame","name":"Silicon Soccer","url":"https://siliconsoccer.com/","description":"A fast turn-based physics football game where liquid blobs battle an AI on a neon microchip pitch.","image":"https://siliconsoccer.com/og.png","genre":["Sports","Strategy","Physics game"],"playMode":"SinglePlayer","applicationCategory":"GameApplication","operatingSystem":"Web browser","publisher":{"@type":"Organization","name":"AIGEN-C","url":"https://aigen-c.com/"}}
 </script>
 <style>
   :root{
@@ -348,7 +354,7 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
   <button class="big ghost" id="mHow">HOW TO PLAY</button>
   <button class="big ghost" id="mSet">SETTINGS</button>
   <p id="mErr"></p>
-  <div class="ver">SILICON SOCCER — AIGEN-C · build v60 · 2026-07-30</div>
+  <div class="ver">SILICON SOCCER — AIGEN-C · build v62 · 2026-07-30</div>
 </div>
 
 <div id="help">
