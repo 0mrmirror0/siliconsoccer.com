@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <script>
-/* gli errori iniettati dal browser ospite (Brave/Firefox iOS, Dark Reader, estensioni)
-   arrivano con il nostro stesso filename: li riconosco dal messaggio e li conto a parte */
+/* Errors injected by the host browser (Brave/Firefox iOS, Dark Reader, extensions)
+   arrive with our same filename: detect them from the message and count them apart. */
 window.__EXT=/__firefox__|__gCrWeb|DarkReader|dark-reader|webkit-masked-url|(safari|chrome|moz)-extension|content-script|AdGuard|Grammarly/i;
 window.__box=function(){
   var b=document.getElementById('__errbox');
@@ -13,7 +13,7 @@ window.__box=function(){
     (document.body||document.documentElement).appendChild(b); }
   return b;
 };
-window.__ext=function(){try{            // una riga sola, con contatore
+window.__ext=function(){try{            // one compact line, with counter
   var b=window.__box(), e=document.getElementById('__extline');
   if(!e){ e=document.createElement('div'); e.id='__extline';
     e.style.cssText='margin:0 0 6px;opacity:.66'; e.setAttribute('data-n','0');
@@ -45,7 +45,7 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
 <meta name="author" content="AIGEN-C">
 <meta name="application-name" content="Silicon Soccer">
 <link rel="canonical" href="https://siliconsoccer.com/">
-<!-- Open Graph: gli scraper non eseguono JS e vogliono URL assoluti -->
+<!-- Open Graph: scrapers do not run JS and expect absolute URLs -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Silicon Soccer">
 <meta property="og:title" content="Silicon Soccer - Liquid football on a microchip">
@@ -55,12 +55,12 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Silicon Soccer: campo grafite con blob rossi e blu su un microchip">
+<meta property="og:image:alt" content="Silicon Soccer: a graphite microchip pitch with red and blue blobs">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Silicon Soccer - Liquid football on a microchip">
 <meta name="twitter:description" content="Aim three liquid blobs, launch everything at once, and outsmart the AI in a neon physics football game.">
 <meta name="twitter:image" content="https://siliconsoccer.com/og.png">
-<!-- installazione a schermo intero su iOS: senza questi resta una scheda di Safari -->
+<!-- Full-screen install on iOS: without these it remains a Safari tab -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -80,7 +80,7 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
     --blue:#4da6ff; --blue-hi:#bcdcff; --blue-dk:#173f78;
     --gold:#c9a86a; --trace:#6fdcff;
     --mono:ui-monospace,"SF Mono","Cascadia Mono","Segoe UI Mono",Menlo,monospace;
-    --shot:9/16;   /* proporzione dei pannelli di HOW TO PLAY */
+    --shot:9/16;   /* HOW TO PLAY panel ratio */
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
@@ -107,7 +107,7 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
   #home{background:none;border:0;padding:4px;line-height:0;cursor:pointer;color:#7ac4ff}
   #home svg{width:30px;height:30px;display:block}
   #home:active{opacity:.6}
-  /* timer: linea sottile sotto i punteggi */
+  /* timer: thin line below the scores */
   #tbar{width:100%;max-width:560px;padding:0 20px 6px;box-sizing:border-box}
   #tbar .trail{height:6px;border-radius:3px;background:#1a2334;overflow:hidden}
   #tbar .tfill{height:100%;width:0%;border-radius:3px;background:#7ac4ff;
@@ -128,16 +128,16 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
   /* replay overlay */
   #repov{position:fixed;inset:0;z-index:59;display:none;background:rgba(5,7,13,.94)}
   body.replaying #repov{display:block}
-  body.replaying #app{z-index:62}                     /* il campo sopra l'overlay */
+  body.replaying #app{z-index:62}                     /* field above the overlay */
   body.replaying header,body.replaying #tbar,body.replaying footer{opacity:.10;pointer-events:none}
-  /* durante il film il campo e' l'unica cosa visibile */
+  /* during the replay, the field is the only visible element */
   #rephint{position:fixed;left:0;right:0;bottom:16px;z-index:63;display:none;text-align:center;
     pointer-events:none;font-family:var(--mono);font-size:12px;font-weight:800;letter-spacing:.18em;
     color:rgba(191,227,255,.72);text-shadow:0 2px 10px rgba(0,0,0,.9)}
   body.replaying #rephint{display:block}
   body.replaying #overlay,body.replaying #ctrbox,body.replaying #toast,
   body.replaying #chat{display:none!important}
-  /* barra di avanzamento del filmato */
+  /* replay progress bar */
   #repbar{position:fixed;left:0;right:0;top:0;height:5px;z-index:65;display:none;background:#16203a}
   body.replaying #repbar{display:block}
   #repbar i{display:block;height:100%;width:0;background:#7ac4ff;transition:width .12s linear}
@@ -261,12 +261,14 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
   #mErr{min-height:18px;font-size:12px;font-weight:600;color:#ffb3aa;margin:0;max-width:320px}
   #menu .ver{position:absolute;bottom:14px;font-family:var(--mono);font-size:10px;
     letter-spacing:.25em;color:rgba(232,237,247,.28)}
+  #menu .ver a{color:inherit;text-decoration:none}
+  #menu .ver a:hover{color:rgba(232,237,247,.55)}
   /* ---------- how to play ---------- */
   #help{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;
     background:var(--bg);overflow-y:auto;touch-action:pan-y;padding:20px 18px 48px;gap:38px}
   #help h2{margin:6px 0 4px;font-size:24px;font-weight:900;letter-spacing:.08em}
   #help .step{width:100%;max-width:440px;text-align:center}
-  /* stesso ingombro per i tre pannelli, qualunque proporzione abbia la PNG */
+  /* same footprint for all three panels, whatever PNG ratio they have */
   #help .shot{position:relative;width:min(82vw,420px);margin:0 auto;aspect-ratio:var(--shot);
     border-radius:16px;border:1px solid var(--panel-line);overflow:hidden;
     background:rgba(10,14,22,.9);box-shadow:0 10px 30px rgba(0,0,0,.4)}
@@ -354,7 +356,7 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
   <button class="big ghost" id="mHow">HOW TO PLAY</button>
   <button class="big ghost" id="mSet">SETTINGS</button>
   <p id="mErr"></p>
-  <div class="ver">SILICON SOCCER — AIGEN-C · build v62 · 2026-07-30</div>
+  <div class="ver">SILICON SOCCER — <a href="https://aigen-c.com/" target="_blank" rel="noopener">AIGEN-C</a> · build v62 · 2026-07-30</div>
 </div>
 
 <div id="help">
