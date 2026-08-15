@@ -5,7 +5,9 @@
 /* Errors injected by the host browser (Brave/Firefox iOS, Dark Reader, extensions)
    arrive with our same filename: detect them from the message and count them apart. */
 window.__EXT=/__firefox__|__gCrWeb|DarkReader|dark-reader|webkit-masked-url|(safari|chrome|moz)-extension|content-script|AdGuard|Grammarly/i;
+window.__DEBUG_ERRORS=/^(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(location.hostname);
 window.__box=function(){
+  if(!window.__DEBUG_ERRORS) return null;
   var b=document.getElementById('__errbox');
   if(!b){ b=document.createElement('div'); b.id='__errbox';
     b.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:9999;max-height:42vh;overflow:auto;background:#4a1010;color:#ffd7d0;font:12px/1.4 monospace;padding:10px 12px;border-radius:10px;white-space:pre-wrap;word-break:break-word;border:1px solid #a33';
@@ -14,7 +16,9 @@ window.__box=function(){
   return b;
 };
 window.__ext=function(){try{            // one compact line, with counter
+  if(!window.__DEBUG_ERRORS) return;
   var b=window.__box(), e=document.getElementById('__extline');
+  if(!b) return;
   if(!e){ e=document.createElement('div'); e.id='__extline';
     e.style.cssText='margin:0 0 6px;opacity:.66'; e.setAttribute('data-n','0');
     b.insertBefore(e, b.firstChild); }
@@ -23,8 +27,10 @@ window.__ext=function(){try{            // one compact line, with counter
   e.textContent='\u26a0 '+n+' browser/extension script error'+(n>1?'s':'')+' \u2014 not from Silicon Soccer';
 }catch(_){}};
 window.__err=function(m){try{
+  if(!window.__DEBUG_ERRORS) return;
   if(window.__EXT.test(String(m))){ window.__ext(); return; }
   var b=window.__box();
+  if(!b) return;
   if(b.querySelectorAll('div:not(#__extline)').length>=6) return;
   var l=document.createElement('div'); l.style.cssText='margin:0 0 6px';
   l.textContent='\u26a0 '+m; b.appendChild(l);
@@ -1115,16 +1121,7 @@ function startLocal(level){
 }
 
 function startLAN(){
-  mode='lan';
-  let ws;
-  try{ ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host); }
-  catch(e){ return failLAN(); }
-  const timeout=setTimeout(()=>{ if(ws.readyState!==1){ ws.close(); failLAN(); } }, 4000);
-  ws.onopen=()=>clearTimeout(timeout);
-  ws.onmessage=ev=>handleMsg(JSON.parse(ev.data));
-  ws.onerror=()=>{};
-  ws.onclose=()=>{ clearTimeout(timeout); if(mode==='lan') failLAN('Connection lost.'); };
-  link={ send:o=>{ if(ws.readyState===1) ws.send(JSON.stringify(o)); }, close:()=>{ ws.onclose=null; ws.close(); } };
+  return failLAN('LAN mode is not available on the public site.');
 }
 function failLAN(t){
   toMenu(t||'LAN mode needs the game server on your network. You can still challenge the AI!');
@@ -1151,7 +1148,7 @@ document.getElementById('mAI').onclick=()=>{
   menu.style.display='none'; resetUI();
   try{ startLocal(botLevel); }catch(e){ toMenu('Startup error: '+e.message); }
 };
-// LAN rimosso dal menu: resta accessibile aprendo la pagina con #lan (test sul Pi)
+// LAN disabled in the public build.
 if(location.hash==='#lan'){ menu.style.display='none'; resetUI(); startLAN(); }
 document.getElementById('home').onclick=()=>toMenu();
 const helpEl=document.getElementById('help');
