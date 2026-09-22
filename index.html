@@ -79,6 +79,25 @@ window.addEventListener('unhandledrejection',function(ev){window.__err('promise:
 {"@context":"https://schema.org","@type":"VideoGame","name":"Silicon Soccer","url":"https://siliconsoccer.com/","description":"A fast turn-based physics football game where liquid blobs battle an AI on a neon microchip pitch.","image":"https://siliconsoccer.com/og.png","genre":["Sports","Strategy","Physics game"],"playMode":"SinglePlayer","applicationCategory":"GameApplication","operatingSystem":"Web browser","publisher":{"@type":"Organization","name":"AIGEN-C","url":"https://aigen-c.com/"}}
 </script>
 <script data-goatcounter="https://siliconsoccer.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>
+/* Privacy-friendly product events. No names, emails, device IDs, or free text. */
+window.ssMetric=function(name,detail){
+  var clean=function(v){return String(v||'').toLowerCase().replace(/[^a-z0-9_-]+/g,'-').slice(0,32);};
+  var path='/event/'+clean(name)+(detail?'/'+clean(detail):'');
+  var send=function(){
+    if(window.goatcounter&&typeof window.goatcounter.count==='function'){
+      window.goatcounter.count({path:path,title:'Silicon Soccer: '+clean(name),event:true});
+      return true;
+    }
+    return false;
+  };
+  if(!send()) setTimeout(send,1200);
+};
+try{
+  if(localStorage.getItem('silicon-soccer-seen')) ssMetric('return_visit');
+  else localStorage.setItem('silicon-soccer-seen','1');
+}catch(_){}
+</script>
 <style>
   :root{
     --bg:#0b0e15; --panel:rgba(18,23,34,.72); --panel-line:rgba(122,148,196,.16);
@@ -1145,6 +1164,7 @@ document.getElementById('mAI').onclick=()=>{
     mErr.textContent='Game modules failed to load. Make sure physics.js, ai.js and engine.js are uploaded next to index.html.';
     return;
   }
+  ssMetric('game_open',botLevel);
   menu.style.display='none'; resetUI();
   try{ startLocal(botLevel); }catch(e){ toMenu('Startup error: '+e.message); }
 };
@@ -1676,11 +1696,13 @@ function shareFile(file,btn){                   // chiamata DENTRO il gesto, sen
   return true;
 }
 if(shImg) shImg.onclick=e=>{ e.stopPropagation();
+  ssMetric('share_image_click');
   if(PEND.png){ shareFile(PEND.png, shImg); return; }
   endcv.toBlob(b=>{ if(!b) return; PEND.png=new File([b],'silicon-soccer.png',{type:'image/png'});
     shImg.textContent='SHARE IMAGE'; },'image/png');
 };
 if(shVid) shVid.onclick=e=>{ e.stopPropagation();
+  ssMetric('share_video_click');
   if(CLIP.busy||CLIP.on) return;
   if(PEND.gif){ shareFile(PEND.gif, shVid); return; }   // gia' pronta: parte il foglio di condivisione
   shVid.disabled=true; shVid.textContent='CAPTURING…';
@@ -1734,6 +1756,7 @@ function onState(s){
         r.goal=true; r.sc=[s.score[0],s.score[1]]; }
     }
     if(s.phase==='over'){
+      ssMetric('match_complete');
       show(teamSpan(s.winner)+' WINS', 'match over');
       fxGoal(s.winner); fxGoal(s.winner); SSCHAT.ev('over'); SSAUDIO.sfx('win');
     }
@@ -1843,8 +1866,8 @@ btn.onclick=()=>{
   if(!state || !link || btn.disabled) return;
   SSAUDIO.tap();
   if(inBotOffer()){ link.send({t:'bot',level:botLevel}); return; }
-  if(state.phase==='lobby'){ iStarted=true; link.send({t:'start'}); return; }
-  if(state.phase==='over'){ link.send({t:'rematch'}); return; }
+  if(state.phase==='lobby'){ ssMetric('match_start',botLevel); iStarted=true; link.send({t:'start'}); return; }
+  if(state.phase==='over'){ ssMetric('rematch'); link.send({t:'rematch'}); return; }
   if(state.phase==='plan'){
     link.send({t:'moves',moves:myMoves});
     iAmReady=true;

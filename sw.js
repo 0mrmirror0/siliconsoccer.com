@@ -1,5 +1,5 @@
 // Silicon Soccer — service worker: gioco offline (cache-first)
-const CACHE = 'silicon-soccer-v62-20260730';
+const CACHE = 'silicon-soccer-v63-20260922';
 const CACHE_PREFIX = 'silicon-soccer-';
 const ASSETS = ['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png','./og.png','./privacy.html'];
 const ASSET_URLS = new Set(ASSETS.map(path => new URL(path, self.location.href).href));
