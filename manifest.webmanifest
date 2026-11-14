@@ -1,13 +1,13 @@
 {
   "name": "Silicon Soccer",
   "short_name": "SiliconSoccer",
-  "description": "Turn-based liquid football on a microchip. Outsmart a physics-simulating AI.",
+  "description": "Turn-based football, cast in silicone. Outsmart a physics-simulating AI.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0b0e15",
-  "theme_color": "#0b0e15",
+  "background_color": "#DDD7CB",
+  "theme_color": "#DDD7CB",
   "lang": "en",
   "icons": [
     {
